@@ -42,3 +42,15 @@ class EventRegistration(models.Model):
 
     def __str__(self):
         return f'{self.user.username} registered for {self.event.name}'
+
+class RegisteredParticipant(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    registration_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, default='Pending')
+
+class EventViewer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    ticket_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, default='Pending')

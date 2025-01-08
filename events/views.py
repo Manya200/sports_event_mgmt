@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from .models import Event
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Event, EventRegistration
+from .models import Event, EventRegistration ,RegisteredParticipant, EventViewer
 from django.contrib import messages
 
 def homepage(request):
@@ -105,3 +105,19 @@ def register_for_event(request, event_id):
     messages.success(request, f"You have successfully registered for {event.name}!")
     
     return redirect('user_dashboard')  # Redirect to dashboard
+
+def register_participant(request, event_id):
+    event = Event.objects.get(id=event_id)
+    registration_fee = 500  # Example fee
+    participant = RegisteredParticipant(user=request.user, event=event, registration_fee=registration_fee)
+    participant.save()
+    messages.success(request, "You have successfully registered for the event. All the best!")
+    return redirect('participant_dashboard')
+
+def buy_ticket(request, event_id):
+    event = Event.objects.get(id=event_id)
+    ticket_price = 100  # Example ticket price
+    viewer = EventViewer(user=request.user, event=event, ticket_price=ticket_price)
+    viewer.save()
+    messages.success(request, "Your ticket has been successfully booked.")
+    return redirect('participant_dashboard')
