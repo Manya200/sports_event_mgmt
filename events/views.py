@@ -8,47 +8,11 @@ from .models import Event
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Event, EventRegistration ,RegisteredParticipant, EventViewer
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 
 def homepage(request):
     return render(request, 'homepage.html')
-
-# # Defineing a view to handle the login functionality
-# @login_required
-# def dashboard(request):
-#     user = request.user
-
-#     if user.groups.filter(name='Event Organizer').exists():
-#         return redirect('event_organizer_dashboard')
-#     elif user.groups.filter(name='Venue Manager').exists():
-#         return redirect('venue_manager_dashboard')
-#     elif user.groups.filter(name='User (Participant)').exists():
-#         return redirect('participant_dashboard')
-#     else:
-#         return render(request, 'error.html', {'message': 'Unauthorized access!'})
-
-# # Defineing a view to handle the login functionality of participant
-# @login_required
-# def participant_dashboard(request):
-#     return render(request, 'participant_dashboard.html')
-
-# # Defineing a view to handle the login functionality of event organizer.
-# @login_required
-# def event_organizer_dashboard(request):
-#     return render(request, 'event_organizer_dashboard.html')
-
-# # Defineing a view to handle the login functionality of venue manager.
-# @login_required
-# def venue_manager_dashboard(request):
-#     return render(request, 'venue_manager_dashboard.html')
-
-# from django.contrib.auth.views import LoginView
-# from django.urls import reverse_lazy
-
-# class CustomLoginView(LoginView):
-#     template_name = 'registration/login.html'
-
-#     def get_success_url(self):
-#         return reverse_lazy('dashboard')
 
 # Custom Login View
 class CustomLoginView(LoginView):
@@ -112,6 +76,7 @@ def register_participant(request, event_id):
     participant = RegisteredParticipant(user=request.user, event=event, registration_fee=registration_fee)
     participant.save()
     messages.success(request, "You have successfully registered for the event. All the best!")
+    
     return redirect('participant_dashboard')
 
 def buy_ticket(request, event_id):
@@ -121,3 +86,42 @@ def buy_ticket(request, event_id):
     viewer.save()
     messages.success(request, "Your ticket has been successfully booked.")
     return redirect('participant_dashboard')
+# to send notification on email
+def send_email_notification(user, role, event):
+    subject = "Registration/Ticket Confirmation"
+    if role == "Participant":
+        message = f"Dear {user.username},\n\nYou have successfully registered for the event: {event.name}. All the best!"
+    elif role == "Viewer":
+        message = f"Dear {user.username},\n\nYour ticket for the event: {event.name} has been successfully booked. Enjoy the event!"
+    
+    recipient_list = [user.email]
+    from_email = settings.EMAIL_HOST_USER
+    
+    send_mail(subject, message, from_email, recipient_list)
+
+
+def payment_page(request, user_role, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'payment_page.html', {'event': event, 'user_role': user_role})
+
+def process_payment(request, user_role, event_id):
+    if request.method == "POST":
+        upi_id = request.POST.get('upi_id')
+        event = get_object_or_404(Event, id=event_id)
+
+        if user_role == "participant":
+            # Save participant registration
+            participant = RegisteredParticipant(user=request.user, event=event, registration_fee=500)
+            participant.save()
+            messages.success(request, "You have successfully registered for the event. All the best!")
+            send_email_notification(request.user, "Participant", event)
+        elif user_role == "viewer":
+            # Save viewer ticket
+            viewer = EventViewer(user=request.user, event=event, ticket_price=100)
+            viewer.save()
+            messages.success(request, "Your ticket has been successfully booked.")
+            send_email_notification(request.user, "Viewer", event)
+
+        return redirect('participant_dashboard')
+    else:
+        return redirect('error')

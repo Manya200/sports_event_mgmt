@@ -9,6 +9,8 @@ urlpatterns = [
     path('register/<int:event_id>/', views.register_for_event, name='register_for_event'),
     path('register/participant/<int:event_id>/', views.register_participant, name='register_participant'),
     path('buy/ticket/<int:event_id>/', views.buy_ticket, name='buy_ticket'),
-
+    path('events/pay/<str:user_role>/<int:event_id>/', views.payment_page, name='payment_page'),
+    path('payment/<str:user_role>/<int:event_id>/', views.payment_page, name='payment_page'),
+    path('events/process_payment/<str:user_role>/<int:event_id>/', views.process_payment, name='process_payment'),
 ]
 

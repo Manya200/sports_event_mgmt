@@ -51,10 +51,58 @@
         .btn:hover {
             background-color: #0056b3;
         }
+      
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        position: relative;
+        font-size: 16px;
+        text-align: center;
+    }
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+    .alert-warning {
+        color: #856404;
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+    }
+    .alert-error {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: #000;
+        cursor: pointer;
+    }
+    .close-btn:hover {
+        color: red;
+    }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Add success message display block here -->
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
+
         <h1>Welcome to the Participant Dashboard</h1>
         <h2>Available Events</h2>
         {% for event in events|slice:"0:10" %} <!-- Show 10 events max for now -->
@@ -69,9 +117,10 @@
                 <p><strong>Venue:</strong> {{ event.venue }}</p>
                 <p><strong>Organizer:</strong> {{ event.organizer }}</p>
                 <div class="btn-container">
-                    <a href="{% url 'register_participant' event.id %}" class="btn">Register</a>
-                    <a href="{% url 'buy_ticket' event.id %}" class="btn">Buy Ticket</a>
+                    <a href="{% url 'payment_page' 'participant' event.id %}" class="btn">Register</a>
+                    <a href="{% url 'payment_page' 'viewer' event.id %}" class="btn">Buy Ticket</a>
                 </div>
+                
             </div>
         {% if forloop.counter|divisibleby:2 or forloop.last %}
         </div>
