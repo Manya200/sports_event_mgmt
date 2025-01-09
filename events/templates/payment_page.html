@@ -9,45 +9,53 @@
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
         .container {
             max-width: 600px;
             margin: 50px auto;
-            background: #fff;
+            background: #ffffff;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
         }
         h1 {
             text-align: center;
+            color: #333;
         }
         .event-details {
             margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
         .event-details p {
-            margin: 5px 0;
+            margin: 10px 0;
             color: #555;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
         label {
-            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
             font-weight: bold;
+            color: #333;
         }
-        input, select, button {
+        input[type="text"] {
+            width: 100%;
             padding: 10px;
-            font-size: 16px;
-            border-radius: 4px;
+            margin-bottom: 20px;
             border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
         button {
+            width: 100%;
+            padding: 10px 15px;
             background-color: #007bff;
-            color: #fff;
+            color: #ffffff;
             border: none;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
         }
         button:hover {
@@ -63,9 +71,9 @@
             <p><strong>Role:</strong> {{ user_role|title }}</p>
             <p><strong>Fee:</strong> 
                 {% if user_role == "participant" %}
-                    ₹500
+                    ₹{{ event.registration_fee }}
                 {% elif user_role == "viewer" %}
-                    ₹100
+                    ₹{{ event.ticket_price }}
                 {% else %}
                     ₹0
                 {% endif %}
@@ -75,7 +83,6 @@
             {% csrf_token %}
             <label for="upi_id">UPI ID:</label>
             <input type="text" id="upi_id" name="upi_id" required placeholder="Enter your UPI ID">
-            
             <button type="submit">Pay Now</button>
         </form>
     </div>

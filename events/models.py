@@ -23,14 +23,15 @@ class Venue(models.Model):
 
 # Event Model
 class Event(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=200)
     description = models.TextField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
+    registration_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    ticket_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     is_active = models.BooleanField(default=True)
-    # registration_fee = models.DecimalField(max_digits=6, decimal_places=2)  # For jersey, etc.
 
     def __str__(self):
         return self.name
