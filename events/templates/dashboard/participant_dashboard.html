@@ -10,6 +10,14 @@
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
+            background-image: url('https://i.pinimg.com/736x/72/75/2f/72752f5719a50f923ecc500d8138d343.jpg');
+            background-size:cover; /* Ensures the image covers the entire container */
+            background-position:center; /* Centers the image */
+            background-repeat: no-repeat;
+            height: 100vh; /* Sets the container height to the full viewport */
+            width: 100%; /* Ensures the container spans the full width */
+            background-attachment: fixed;
+            overflow: auto;
         }
         .container {
             max-width: 1200px;
@@ -20,16 +28,17 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            margin-bottom: 20px;
+            gap: 20px; /* Space between cards */
         }
         .event-card {
-            background: #ffffff;
+            background: rgba(255, 228, 196, 0.7);
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
-            width: 48%;
+            width: 48%; /* 2 items per row */
             margin-bottom: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
         }
         .event-card h3 {
             margin: 0 0 10px;
@@ -80,6 +89,23 @@
         .close-btn:hover {
             color: red;
         }
+
+        /* Ensure responsiveness for smaller screens */
+        @media (max-width: 768px) {
+            .event-card {
+                width: 100%; /* Stacks the events vertically on small screens */
+            }
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +120,7 @@
         {% endfor %}
         {% endif %}
 
-        <h1>Welcome to the Participant Dashboard</h1>
+        <h1>Welcome, {{ user.first_name }}!</h1>
         <h2>Available Events</h2>
 
         {% if events %}
@@ -120,5 +146,8 @@
         </div>
         {% endif %}
     </div>
+    <footer>
+        &copy; 2025 Sports Event Management. All Rights Reserved.
+    </footer>
 </body>
 </html>

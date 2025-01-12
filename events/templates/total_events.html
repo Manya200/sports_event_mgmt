@@ -1,0 +1,6 @@
+<h1>Total Events</h1>
+<ul>
+    {% for event in events %}
+        <li>{{ event.name }} - {{ event.start_date }}</li>
+    {% endfor %}
+</ul>

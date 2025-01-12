@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1><span class="highlighted-text">Edit Profile</span></h1>
+
+<form method="POST" action="{% url 'edit_profile' %}">
+    {% csrf_token %}
+    
+    <div class="form-container">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ user.name }}" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}" required>
+        
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" value="{{ user.phone }}" required>
+        
+        <button type="submit">Save Changes</button>
+    </div>
+</form>
+
+<style>
+    /* General Styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        background-image: url("https://i.pinimg.com/736x/72/75/2f/72752f5719a50f923ecc500d8138d343.jpg");
+        background-size: cover; /* Ensures the image covers the entire container */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat;
+        height: 100vh; /* Sets the container height to the full viewport */
+        width: 100%; /* Ensures the container spans the full width */
+        overflow: auto;
+        background-attachment: fixed;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin: 40px 0;
+        color: #007bff;
+        
+    }
+    .highlighted-text {
+    background-color: rgba(255, 228, 196, 0.6); /* Transparent bisque background */
+    padding: 5px; /* Adds some space around the text */
+    border-radius: 5px; 
+    }
+
+    /* Form Styling */
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .form-container {
+        background-color: rgba(255, 228, 196, 0.7);
+        padding: 30px;
+        width: 400px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        box-sizing: border-box;
+    }
+
+    label {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        color: black;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 1rem;
+        background-color: #f9f9f9;
+    }
+
+    input:focus {
+        border-color: #007bff;
+        outline: none;
+        background-color: #fff;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .form-container {
+            width: 90%;
+            padding: 20px;
+        }
+    }
+</style>
+
+{% endblock %}

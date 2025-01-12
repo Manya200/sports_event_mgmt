@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f8f9fa;
+        background-image: url("https://i.pinimg.com/736x/72/75/2f/72752f5719a50f923ecc500d8138d343.jpg");
+        background-size: cover; /* Ensures the image covers the entire container */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat;
+        height: 100vh; /* Sets the container height to the full viewport */
+        width: 100%; /* Ensures the container spans the full width */
+        background-attachment: fixed;
+        overflow: auto;
+    }
+
+    h1, h2 {
+        color: black;
+    }
+    
+    .highlighted-text {
+    background-color: rgba(255, 228, 196, 0.7); /* Transparent bisque background */
+    padding: 5px; /* Adds some space around the text */
+    border-radius: 5px; /* Optional, gives a rounded corner effect */
+}
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: rgba(255, 228, 196, 0.7);
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    table th, table td {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #343a40;
+        color: #ffffff;
+        text-transform: uppercase;
+    }
+
+    table tr:nth-child(even) {
+        background-color: rgba(255, 228, 196, 0.7);
+    }
+
+    table tr:hover {
+        background-color: #e9ecef;
+    }
+
+    form {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: rgba(255, 228, 196, 0.7);
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    input, textarea, select, button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #80bdff;
+        outline: none;
+        box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+    }
+
+    button {
+        background-color: #007bff;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .actions a {
+        text-decoration: none;
+        color: #007bff;
+        margin-right: 10px;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+    .actions a:hover {
+        color: #0056b3;
+    }
+</style>
+
+<h1><span class="highlighted-text">Your Dashboard</span></h1>
+
+<h2><span class="highlighted-text">Your Events</span></h2>
+<table>
+    <thead>
+        <tr>
+            <th>Event Name</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Venue</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in organizer_events %}
+        <tr>
+            <td>{{ event.name }}</td>
+            <td>{{ event.description }}</td>
+            <td>{{ event.start_date }}</td>
+            <td>{{ event.end_date }}</td>
+            <td>{{ event.venue.name }}</td>
+            <td class="actions">
+                <a href="{% url 'update_event' event.id %}">Edit</a> |
+                <a href="{% url 'delete_event' event.id %}" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No events created yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2><span class="highlighted-text">Create New Event</span></h2>
+<form method="POST" action="{% url 'create_event' %}">
+    {% csrf_token %}
+    <label for="name">Event Name:</label>
+    <input type="text" id="name" name="name" required>
+    
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+
+    <label for="registration_fee">Registration Fee:</label>
+    <input type="number" id="registration_fee" name="registration_fee" required>
+    
+    <label for="ticket_price">Ticket Fee:</label>
+    <input type="number" id="ticket_price" name="ticket_price" required>
+    
+    <label for="start_date">Start Date:</label>
+    <input type="datetime-local" id="start_date" name="start_date" required>
+    
+    <label for="end_date">End Date:</label>
+    <input type="datetime-local" id="end_date" name="end_date" required>
+    
+    <label for="venue">Venue:</label>
+    <select id="venue" name="venue" required>
+        {% for venue in venues %}
+        <option value="{{ venue.id }}">{{ venue.name }}</option>
+        {% endfor %}
+    </select>
+    
+    <button type="submit">Add Event</button>
+</form>
+{% endblock %}

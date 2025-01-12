@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f9fc;
+        margin: 0;
+        padding: 0;
+        background-image: url("https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?semt=ais_hybrid");
+        background-size: cover; /* Ensures the image covers the entire container */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat;
+        height: 100vh; /* Sets the container height to the full viewport */
+        width: 100%; /* Ensures the container spans the full width */
+        overflow: auto;
+        background-attachment: fixed;
+    }
+
+    h2 {
+        color: black;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .highlighted-text {
+    background-color: rgba(255, 228, 196, 0.7); /* Transparent bisque background */
+    padding: 5px; /* Adds some space around the text */
+    border-radius: 5px; /* Optional, gives a rounded corner effect */
+}
+
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #5b9bd5;
+        box-shadow: 0 0 5px rgba(91, 155, 213, 0.5);
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-cancel {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .btn-cancel a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .btn-cancel a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h2><span class="highlighted-text">Update Event: {{ event.name }}</span></h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Event</button>
+    <div class="btn-cancel">
+        <a href="{% url 'dashboard' %}">Cancel and go back</a>
+    </div>
+</form>
+{% endblock %}

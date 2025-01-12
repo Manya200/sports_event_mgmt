@@ -1,0 +1,22 @@
+<!-- view_other_events.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Other Events</h1>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Venue</th>
+    </tr>
+    {% for event in events %}
+    <tr>
+        <td>{{ event.name }}</td>
+        <td>{{ event.start_date }}</td>
+        <td>{{ event.end_date }}</td>
+        <td>{{ event.venue }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

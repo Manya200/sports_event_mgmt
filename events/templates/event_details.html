@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ event.name }}</h1>
+<p><strong>Description:</strong> {{ event.description }}</p>
+<p><strong>Start Date:</strong> {{ event.start_date }}</p>
+<p><strong>End Date:</strong> {{ event.end_date }}</p>
+<p><strong>Venue:</strong> {{ event.venue }}</p>
+<p><strong>Organizer:</strong> {{ event.organizer }}</p>
+<a href="{% url 'register_for_event' event.id %}" class="btn btn-primary">Register</a>
+{% endblock %}

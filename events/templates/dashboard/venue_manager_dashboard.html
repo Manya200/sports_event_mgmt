@@ -3,10 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venue Manager Dashboard</title>
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+            background-image: url('https://i.pinimg.com/736x/72/75/2f/72752f5719a50f923ecc500d8138d343.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            overflow: auto;
+        }
+
+        h1, h2, h3 {
+            color: #343a40;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: rgba(255, 228, 196, 0.6);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #343a40;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        table tr:nth-child(even) {
+            background-color: rgba(255, 228, 196, 0.7);
+        }
+
+        table tr:hover {
+            background-color: #e9ecef;
+        }
+
+        form {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 228, 196, 0.7);
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #80bdff;
+            outline: none;
+            box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Venue Manager Dashboard</h1>
-    <p>Manage venues and bookings here!</p>
+    <h2>Welcome, {{ user.first_name }}!</h2>  <!-- Display Venue Manager's name -->
+
+    <!-- All Events Section -->
+    <h3>All Events</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Venue</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.start_date }}</td>
+                    <td>{{ event.end_date }}</td>
+                    <td>{{ event.venue }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No events available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- List of Venues Section -->
+    <h3>List of Venues</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Venue Name</th>
+                <th>Address</th>
+                <th>Capacity</th>
+                <!-- <th>Created By</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for venue in venues %}
+                <tr>
+                    <td>{{ venue.name }}</td>
+                    <td>{{ venue.address }}</td>
+                    <td>{{ venue.capacity }}</td>
+                    <!-- <td>{{ venue.created_by }}</td> -->
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No venues available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add New Venue Section -->
+    <h3>Add New Venue</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Venue</button>
+    </form>
 </body>
 </html>
