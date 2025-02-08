@@ -37,6 +37,42 @@ class CustomLoginView(LoginView):
         else:
             return reverse_lazy('error')
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib import messages
+from django.contrib.auth.models import Group
+from .forms import CustomUserCreationForm
+
+def register(request):
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()  # The password is hashed automatically
+            role = form.cleaned_data.get("role")  # This is one of: 'admin', 'event_organizer', 'user', 'venue_manager'
+            
+            # Map the selected role to the corresponding group (make sure the group names match exactly)
+            if role == "admin":
+                group = Group.objects.get(name="Admin")
+            elif role == "event_organizer":
+                group = Group.objects.get(name="Event Organizer")
+            elif role == "user":
+                group = Group.objects.get(name="User")
+            elif role == "venue_manager":
+                group = Group.objects.get(name="Venue Manager")
+            
+            user.groups.add(group)  # Automatically add the user to the chosen group
+            login(request, user)    # Optionally, auto-login the user after registration
+            messages.success(request, "Registration successful. You can now log in.")
+            return redirect("login")  # Redirect to login (or another page) after successful registration
+        else:
+            messages.error(request, "Error in registration. Please check your details.")
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, "registration/register_new_user.html", {"form": form})
+
+
+
 def get_all_events_for_organizer(organizer):
     # Ensure you're using the User instance (not just a string)
     return Event.objects.filter(organizer=organizer)  # 'organizer' should be a User instance

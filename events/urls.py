@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth.views import LogoutView
-
+from .views import register
 urlpatterns = [
     path('dashboard/event-organizer/', views.event_organizer_dashboard, name='event_organizer_dashboard'),
     path('dashboard/venue-manager/', views.venue_manager_dashboard, name='venue_manager_dashboard'),
@@ -26,5 +26,7 @@ urlpatterns = [
     path('participants_list/', views.participants_list, name='participants_list'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('homepage/', LogoutView.as_view(next_page='homepage'), name='logout'),
+    # for registration path
+    path("signup/", register, name="register_new"),
 ]
 
