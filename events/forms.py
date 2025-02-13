@@ -51,7 +51,7 @@ User = get_user_model()  # This ensures we use the default User model
 
 class CustomUserCreationForm(UserCreationForm):
     ROLE_CHOICES = [
-        ('admin', 'Admin'),
+        # ('admin', 'Admin'),
         ('event_organizer', 'Event Organizer'),
         ('user', 'User'),
         ('venue_manager', 'Venue Manager'),
